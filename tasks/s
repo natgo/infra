@@ -1,0 +1,24 @@
+---
+- name: Update packages
+  apt:
+    update_cache: yes
+    upgrade: yes
+    autoremove: yes
+
+- name: Install essential packages
+  package:
+    name: "{{ packages }}"
+    state: present
+
+- name: Disable ssh password auth
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#PasswordAuthentication yes"
+    line: "PasswordAuthentication no"
+  register: sshd_config
+
+- name: Restart ssh daemon
+  service:
+    name: sshd
+    state: restarted
+  when: sshd_config.changed

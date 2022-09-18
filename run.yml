@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+      #
+      # Basics
+      #
+      - role: system
+        tags:
+            - system
+      # - role: tvheadend
+      #  tags:
+      #      - services

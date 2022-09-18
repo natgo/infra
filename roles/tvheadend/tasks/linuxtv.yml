@@ -1,0 +1,20 @@
+---
+- name: Add LinuxTV media tree repository from PPA
+  block:
+    - name: Check if the key exists
+      stat:
+        path: /etc/apt/trusted.gpg.d/linuxtv.gpg
+      register: signing_key
+
+    - name: Add the signing key
+      ansible.builtin.shell: curl "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9ec21b6eaabf32a03a92ca2eed51750f9347dec9" | gpg --dearmor -o /etc/apt/trusted.gpg.d/linuxtv.gpg
+      when: not signing_key.stat.exists
+
+    - name: Add LinuxTV media tree source
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/linuxtv.gpg] https://ppa.launchpadcontent.net/b-rad/kernel+mediatree+hauppauge/ubuntu {{ ansible_distribution_release }} main"
+        state: present
+- name: Install Hauppage Firmware
+  apt:
+    name: linux-firmware-hauppauge
+    state: present
