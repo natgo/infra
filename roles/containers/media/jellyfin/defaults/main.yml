@@ -1,0 +1,6 @@
+---
+container_name: jellyfin
+
+url: "jellyfin.{{ domain }}"
+
+ip_address: "{{ swag_base }}.5"

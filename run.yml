@@ -12,3 +12,7 @@
       # - role: tvheadend
       #  tags:
       #      - services
+
+      - role: podman
+        tags:
+            - podman

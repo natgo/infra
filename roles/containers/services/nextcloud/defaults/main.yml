@@ -1,0 +1,7 @@
+mysql_db: "nextcloud_db"
+
+mysql_user: "nextcloud"
+
+container_name: nextcloud
+
+url: "{{ subdomains['nextcloud'] }}.{{ host }}"

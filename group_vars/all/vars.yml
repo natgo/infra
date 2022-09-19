@@ -50,8 +50,6 @@ boot_drive_serial: ''
 
 spindown_time: 600 # in seconds
 
-subdomains: { 'nextcloud': 'nextcloud', 'jellyfin': 'jellyfin', "bluemap": "bluemap", "request": "request", "status": "status" }
-
 #
 # Packages
 #
