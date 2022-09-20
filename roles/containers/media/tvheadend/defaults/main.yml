@@ -1,0 +1,4 @@
+---
+container_name: tvheadend
+
+ip_address: "{{ swag_base }}.5"

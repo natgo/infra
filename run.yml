@@ -18,6 +18,12 @@
         become: true
         tags:
             - podman
+
+      - role: nfs
+        become: true
+        tags:
+            - nfs
+        when: enable_nfs | default(False)
       #
       # System containers
       #
@@ -57,6 +63,12 @@
             - services
             - containers
         when: enable_uptime_kuma | default(False)
+      - role: containers/media/tvheadend
+        tags:
+            - tvheadend
+            - media
+            - containers
+        when: enable_tvheadend | default(False)
       - role: containers/media/jellyfin
         tags:
             - jellyfin

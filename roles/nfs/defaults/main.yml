@@ -1,0 +1,6 @@
+---
+nfsd_exports: [
+  "/media/sdb-crypt/toronto 192.168.1.123(rw,sync,no_subtree_check)"
+]
+
+nfsd_package: nfs-kernel-server

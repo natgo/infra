@@ -1,0 +1,9 @@
+---
+
+- name: reload nfsd
+  ansible.builtin.systemd:
+    name: "{{ nfsd_package }}"
+    state: reloaded
+
+# EOF
+...

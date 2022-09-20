@@ -9,6 +9,8 @@
       - "{{ podman_dir }}/{{ container_name }}:/config"
     env:
       'TZ': '{{ timezone }}'
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
       "URL": "{{ domain }}"
       "SUBDOMAINS": "jellyfin,nextcloud,bluemap,status,request"
       "VALIDATION": "http"

@@ -5,10 +5,18 @@
     state: directory
     mode: "0770"
 
+- name: Add {{ username }} to video group
+  become: true
+  user:
+    name: "{{ username }}"
+    groups:
+      - video
+    append: true
+
 - name: Make sure the {{ container_name }} container is created and running
   containers.podman.podman_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/jellyfin"
+    image: "lscr.io/linuxserver/tvheadend:latest"
     networks:
       - name: swag
         ipv4_address: "{{ ip_address }}"
@@ -19,7 +27,9 @@
       "PGID": "{{ guid }}"
     volumes:
       - "{{ podman_dir }}/{{ container_name }}/config:/config"
-      - "{{ podman_dir }}/{{ container_name }}/cache:/cache"
-      - '/media/sda-crypt/jellyfin:/media'
-      - '/media/sdb-crypt/jellyfin/movies:/media/ssdmovies'
+      - "{{ podman_dir }}/{{ container_name }}/recordings:/recordings"
+    devices:
+      - /dev/dvb:/dev/dvb
+    groups:
+      - keep-groups
     restart_policy: unless-stopped

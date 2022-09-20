@@ -4,17 +4,11 @@
     dest: /etc/ssh/sshd_config
     regexp: "^#PasswordAuthentication yes"
     line: "PasswordAuthentication no"
-  register: sshd_pass
+  notify: reload sshd
 
 - name: Disable ssh root login
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^#PermitRootLogin prohibit-password"
     line: "PermitRootLogin no"
-  register: sshd_root
-
-- name: Restart sshd if required
-  service:
-    name: sshd
-    state: restarted
-  when: sshd_pass.changed or sshd_root.changed
+  notify: reload sshd

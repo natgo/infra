@@ -48,13 +48,14 @@ extra_packages:
     - git
     - ncdu
     - unzip
-    - nfs-kernel-server
 
 #
 # Enable/disable functionality
 #
 
 # Media
+
+enable_tvheadend: false
 
 enable_jellyfin: false
 
@@ -82,8 +83,6 @@ enable_swag: false
 
 # Misc
 
-enable_authelia: false
-
 enable_diun: true
 
-enable_scrutiny: false
+enable_nfs: true
