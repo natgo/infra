@@ -1,0 +1,3 @@
+container_name: heimdall
+
+ip_address: "{{ swag_base }}.20"

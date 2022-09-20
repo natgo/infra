@@ -1,0 +1,24 @@
+---
+
+- name: Make sure the {{ container_name }} container is created and running
+  containers.podman.podman_container:
+    name: '{{ container_name }}'
+    image: "lscr.io/linuxserver/swag"
+    state: 'started'
+    volumes:
+      - "{{ podman_dir }}/{{ container_name }}:/config"
+    env:
+      'TZ': '{{ timezone }}'
+      "URL": "{{ domain }}"
+      "SUBDOMAINS": "jellyfin,nextcloud,bluemap,status,request"
+      "VALIDATION": "http"
+      "DHLEVEL": "2048"
+      "ONLY_SUBDOMAINS": "false"
+      "STAGING": "false"
+    networks:
+      - name: swag
+        ipv4_address: "{{ ip_address }}"
+    ports:
+      - 80:80
+      - 443:443
+    restart_policy: unless-stopped

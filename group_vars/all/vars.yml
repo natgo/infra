@@ -15,8 +15,6 @@ swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
 
 swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
 
-swag_interface: eth1
-
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.137"
 
 lan_base: "{{ '.'.join(lan_network.split('.')[0:3]) }}"
@@ -30,8 +28,6 @@ hostname: '{{ inventory_hostname }}'
 
 timezone: Europe/Helsinki
 
-ntp_timezone: '{{ timezone }}'
-
 locale: en_US.UTF-8
 
 dns_nameservers: ['9.9.9.9', '149.112.112.112']
@@ -42,13 +38,7 @@ username: jone
 
 guid: '1000'
 
-shell: /bin/bash
-
-docker_dir: /opt/docker/data
-
-boot_drive_serial: ''
-
-spindown_time: 600 # in seconds
+podman_dir: /srv/podman
 
 #
 # Packages
@@ -63,72 +53,39 @@ extra_packages:
 #
 # Enable/disable functionality
 #
-enable_nas_stuff: false
-
-# Home automation
-
-enable_deconz: false
-
-enable_homeassistant: false
-
-enable_mqtt: false
 
 # Media
 
-enable_plex: false
-
 enable_jellyfin: false
-
-enable_photoprism: false
-
-enable_booksonic: false
-
-# Yo-ho-ho
-
-enable_deluge: false
-
-enable_qbittorrent: false
 
 enable_sonarr: false
 
 enable_radarr: false
 
-enable_openbooks: false
+enable_bazarr: false
 
-enable_jackett: false
+enable_prowlarr: false
+
+enable_jellyseerr: false
 
 # Public-facing services
 
+enable_heimdall: false
+
 enable_nextcloud: false
+
+enable_uptime-kuma: false
+
+enable_mumble: false
 
 enable_swag_public: false
 
 enable_swag_internal: false
 
-# VPN
-
-enable_wireguard: false
-
-enable_ikev2: false
-
-# Homepages
-
-enable_flame: false
-
-# Monitoring
-#
-enable_grafana: false
-
-enable_prometheus: false
-
-enable_node_exporter: true
-
 # Misc
 
 enable_authelia: false
 
-enable_adguard: false
+enable_diun: true
 
-enable_watchtower: false
-
-enable_endlessh: false
+enable_scrutiny: false

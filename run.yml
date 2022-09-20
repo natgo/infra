@@ -16,3 +16,12 @@
       - role: podman
         tags:
             - podman
+      #
+      # System containers
+      #
+      - role: containers/system/diun
+        become: false
+        tags:
+            - diun
+            - containers
+        when: enable_diun | default(False)

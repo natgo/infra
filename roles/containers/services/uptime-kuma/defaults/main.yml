@@ -1,0 +1,5 @@
+container_name: uptime-kuma
+
+url: "status.{{ domain }}"
+
+ip_address: "{{ swag_base }}.3"

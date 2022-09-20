@@ -1,0 +1,4 @@
+---
+container_name: prowlarr
+
+ip_address: "{{ swag_base }}.13"

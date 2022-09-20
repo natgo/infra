@@ -1,14 +1,21 @@
 ---
-- name: Make sure the diun container is created and running
-  docker_container:
+- name: Make sure the {{ container_name }} container is created and running
+  containers.podman.podman_container:
     name: '{{ container_name }}'
-    image: "crazymax/diun:latest"
-    pull: true
+    image: "docker.io/crazymax/diun:latest"
     state: 'started'
-    env:
-      PUID: "{{ guid }}"
-      PGID: "{{ guid }}"
     volumes:
-      - "{{ docker_dir }}/{{ container_name }}:/data"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    restart_policy: unless-stopped
+      - "{{ podman_dir }}/{{ container_name }}:/data"
+      - "/var/run/user/1000/podman/podman.sock:/var/run/docker.sock"
+    env:
+      'TZ': '{{ timezone }}'
+      "LOG_LEVEL": "info"
+      "LOG_JSON": "false"
+      "DIUN_WATCH_WORKERS": "20"
+      "DIUN_WATCH_SCHEDULE": "0 */6 * * *"
+      "DIUN_PROVIDERS_DOCKER": "true"
+      "DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT": "true"
+      "DIUN_NOTIF_DISCORD_MENTIONS": "@here,@everyone"
+      "DIUN_NOTIF_DISCORD_WEBHOOKURL": "{{ diun_webhook }}"
+      "DIUN_NOTIF_DISCORD_TEMPLATEBODY": "{{ diun_template }}"
+    restart_policy: always

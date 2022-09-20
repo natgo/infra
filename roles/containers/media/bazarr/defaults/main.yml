@@ -1,0 +1,4 @@
+---
+container_name: bazarr
+
+ip_address: "{{ swag_base }}.12"

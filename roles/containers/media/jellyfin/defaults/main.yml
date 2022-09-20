@@ -3,4 +3,4 @@ container_name: jellyfin
 
 url: "jellyfin.{{ domain }}"
 
-ip_address: "{{ swag_base }}.5"
+ip_address: "{{ swag_base }}.4"

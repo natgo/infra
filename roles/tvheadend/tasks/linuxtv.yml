@@ -14,6 +14,7 @@
       ansible.builtin.apt_repository:
         repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/linuxtv.gpg] https://ppa.launchpadcontent.net/b-rad/kernel+mediatree+hauppauge/ubuntu {{ ansible_distribution_release }} main"
         state: present
+
 - name: Install Hauppage Firmware
   apt:
     name: linux-firmware-hauppauge

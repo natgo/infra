@@ -1,6 +1,4 @@
 ---
 container_name: sonarr
 
-url: "sonarr.{{ host_local }}"
-
-ip_address: "{{ swag_base }}.16"
+ip_address: "{{ swag_base }}.11"

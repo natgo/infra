@@ -4,4 +4,4 @@ mysql_user: "nextcloud"
 
 container_name: nextcloud
 
-url: "{{ subdomains['nextcloud'] }}.{{ host }}"
+url: "nextcloud.{{ domain }}"

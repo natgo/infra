@@ -1,0 +1,4 @@
+---
+container_name: jellyseerr
+
+ip_address: "{{ swag_base }}.14"

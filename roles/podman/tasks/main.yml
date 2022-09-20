@@ -6,27 +6,34 @@
     name: "{{ podman_packages }}"
     state: present
 
+- name: Create the swag network
+  become: false
+  containers.podman.podman_network:
+    name: swag
+    subnet: "{{ swag_network }}"
+    gateway: "{{ swag_gateway }}"
+
 # - name: Handle persistent data
 #   become: no
 #   when: "enable_nas_stuff | default(False)"
 #   block:
 #   - name: Check if the persistent data folder exists on the remote machine
 #     stat:
-#       path: "{{ docker_dir }}"
+#       path: "{{ podman_dir }}"
 #     register: persistent_data
 #     when: "enable_nas_stuff | default(False)"
 #
 #   - name: Check if the persistent data folder is empty
 #     find:
 #       paths:
-#         - "{{ docker_dir }}/"
+#         - "{{ podman_dir }}/"
 #       recurse: yes
 #     register: persistent_data_find
 #     when: "enable_nas_stuff | default(False)"
 #
 #   - name: Create the persistent data folder on the remote machine
 #     file:
-#       dest: "{{ docker_dir }}"
+#       dest: "{{ podman_dir }}"
 #       state: directory
 #       owner: "{{ username }}"
 #       group: "users"
@@ -37,7 +44,7 @@
 # - name: Chmod the data folder
 #   become: yes
 #   file:
-#     dest: "{{ docker_dir }}"
+#     dest: "{{ podman_dir }}"
 #     state: directory
 #     owner: "{{ username }}"
 #     mode: "0775"

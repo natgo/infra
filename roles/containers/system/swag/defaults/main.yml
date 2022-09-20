@@ -1,0 +1,4 @@
+---
+container_name: swag
+
+ip_address: "{{ swag_base }}.2"

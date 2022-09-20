@@ -1,5 +1,3 @@
 inventory_hostname: ubuntu-server
 
 domain: natgo.xyz
-
-subdomains: { 'nextcloud': 'nextcloud', 'jellyfin': 'jellyfin', "bluemap": "bluemap", "request": "request", "status": "status" }

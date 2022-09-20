@@ -1,0 +1,14 @@
+---
+- name: Make sure the {{ container_name }} container is created and running
+  containers.podman.podman_container:
+    name: '{{ container_name }}'
+    image: "docker.io/louislam/uptime-kuma:1"
+    state: 'started'
+    volumes:
+      - "{{ podman_dir }}/{{ container_name }}:/app/data"
+    env:
+      'TZ': '{{ timezone }}'
+    networks:
+      - name: swag
+        ipv4_address: "{{ ip_address }}"
+    restart_policy: unless-stopped
