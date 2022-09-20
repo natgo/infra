@@ -1,4 +1,10 @@
 ---
+- name: Make {{ podman_dir }}/{{ container_name }} directory
+  ansible.builtin.file:
+    path: "{{ podman_dir }}/{{ container_name }}"
+    state: directory
+    mode: "0770"
+
 - name: Create a nextcloud network
   containers.podman.podman_network:
     name: nextcloud_network

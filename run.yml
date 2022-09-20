@@ -1,12 +1,13 @@
 ---
 - hosts: all
-  become: true
+  become: false
 
   roles:
       #
       # Basics
       #
       - role: system
+        become: true
         tags:
             - system
       # - role: tvheadend
@@ -14,14 +15,81 @@
       #      - services
 
       - role: podman
+        become: true
         tags:
             - podman
       #
       # System containers
       #
       - role: containers/system/diun
-        become: false
         tags:
             - diun
             - containers
         when: enable_diun | default(False)
+
+      - role: containers/system/swag
+        tags:
+            - swag
+            - containers
+        when: enable_swag | default(False)
+
+      - role: containers/services/heimdall
+        tags:
+            - heimdall
+            - services
+            - containers
+        when: enable_heimdall | default(False)
+      - role: containers/services/mumble
+        tags:
+            - mumble
+            - services
+            - containers
+        when: enable_mumble | default(False)
+      - role: containers/services/nextcloud
+        tags:
+            - nextcloud
+            - services
+            - containers
+        when: enable_nextcloud | default(False)
+      - role: containers/services/uptime-kuma
+        tags:
+            - uptime-kuma
+            - services
+            - containers
+        when: enable_uptime_kuma | default(False)
+      - role: containers/media/jellyfin
+        tags:
+            - jellyfin
+            - media
+            - containers
+        when: enable_jellyfin | default(False)
+      - role: containers/media/prowlarr
+        tags:
+            - prowlarr
+            - media
+            - containers
+        when: enable_prowlarr | default(False)
+      - role: containers/media/radarr
+        tags:
+            - radarr
+            - media
+            - containers
+        when: enable_radarr | default(False)
+      - role: containers/media/sonarr
+        tags:
+            - sonarr
+            - media
+            - containers
+        when: enable_sonarr | default(False)
+      - role: containers/media/bazarr
+        tags:
+            - bazarr
+            - media
+            - containers
+        when: enable_bazarr | default(False)
+      - role: containers/media/jellyseerr
+        tags:
+            - jellyseerr
+            - media
+            - containers
+        when: enable_jellyseerr | default(False)

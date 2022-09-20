@@ -1,4 +1,10 @@
 ---
+- name: Make {{ podman_dir }}/{{ container_name }} directory
+  ansible.builtin.file:
+    path: "{{ podman_dir }}/{{ container_name }}"
+    state: directory
+    mode: "0770"
+
 - name: Make sure the {{ container_name }} container is created and running
   containers.podman.podman_container:
     name: "{{ container_name }}"

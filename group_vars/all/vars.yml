@@ -74,13 +74,11 @@ enable_heimdall: false
 
 enable_nextcloud: false
 
-enable_uptime-kuma: false
+enable_uptime_kuma: false
 
 enable_mumble: false
 
-enable_swag_public: false
-
-enable_swag_internal: false
+enable_swag: false
 
 # Misc
 
