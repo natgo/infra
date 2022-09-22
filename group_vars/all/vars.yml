@@ -11,9 +11,15 @@ lan_network: '192.168.1.0/24'
 
 swag_network: '10.0.0.0/24'
 
+minecraft_network: '20.0.0.0/24'
+
 swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
 
 swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
+
+minecraft_base: "{{ '.'.join(minecraft_network.split('.')[0:3]) }}"
+
+minecraft_gateway: "{{ '.'.join(minecraft_network.split('.')[0:3]) }}.1"
 
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.137"
 
@@ -81,7 +87,15 @@ enable_mumble: false
 
 enable_swag: false
 
-enable_jmusicbot: true
+enable_jmusicbot: false
+
+# Minecraft
+
+enable_minecraft_velocity: true
+
+enable_minecraft_main: false
+
+enable_minecraft_secondary: false
 
 # Misc
 

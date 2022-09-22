@@ -1,0 +1,32 @@
+---
+- name: Make {{ podman_dir }}/{{ container_name }} directory
+  ansible.builtin.file:
+    path: "{{ podman_dir }}/{{ container_name }}"
+    state: directory
+    mode: "0770"
+
+- name: "Add config file for {{ container_name }}"
+  ansible.builtin.template:
+    src: "velocity.j2"
+    dest: "{{ podman_dir }}/{{ container_name }}/velocity.toml"
+    mode: "0660"
+  notify: Restart velocity
+
+- name: Make sure the {{ container_name }} container is created and running
+  containers.podman.podman_container:
+    name: "{{ container_name }}"
+    image: "docker.io/itzg/bungeecord"
+    network:
+      - name: minecraft
+        ipv4_address: "{{ ip_address }}"
+    state: 'started'
+    env:
+      "TYPE": "VELOCITY"
+      "TZ": "{{ timezone }}"
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+    volumes:
+      - "{{ podman_dir }}/{{ container_name }}:/server"
+    restart_policy: unless-stopped
+    ports:
+      - 25565:25577

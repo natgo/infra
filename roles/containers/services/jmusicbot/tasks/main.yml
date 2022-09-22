@@ -6,11 +6,11 @@
     mode: "0770"
 
 - name: "Add config file for {{ container_name }}"
-  template:
+  ansible.builtin.template:
     src: "jmusicbot_config.j2"
     dest: "{{ podman_dir }}/{{ container_name }}/config.txt"
     mode: "0660"
-  notify: restart jmusicbot
+  notify: Restart jmusicbot
 
 - name: Make sure the {{ container_name }} container is created and running
   containers.podman.podman_container:

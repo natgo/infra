@@ -113,3 +113,12 @@
             - media
             - containers
         when: enable_jellyseerr | default(False)
+      #
+      # Minecraft containers
+      #
+      - role: containers/minecraft/velocity
+        tags:
+            - velocity
+            - minecraft
+            - containers
+        when: enable_minecraft_velocity | default(False)
