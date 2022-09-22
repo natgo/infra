@@ -1,0 +1,10 @@
+---
+
+- name: restart jmusicbot
+  containers.podman.podman_container:
+    name: "{{ container_name }}"
+    state: 'started'
+    force_restart: true
+
+# EOF
+...

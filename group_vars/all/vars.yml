@@ -81,6 +81,8 @@ enable_mumble: false
 
 enable_swag: false
 
+enable_jmusicbot: true
+
 # Misc
 
 enable_diun: true

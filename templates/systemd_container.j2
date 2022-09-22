@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+# container-{{ id.containers[0].Id }}.service
+
+
+[Unit]
+Description=Podman container-{{ id.containers[0].Id }}.service
+Documentation=man:podman-generate-systemd(1)
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/run/user/1000/containers
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Restart=on-failure
+TimeoutStopSec=70
+ExecStart=/usr/bin/podman start {{ id.containers[0].Id }}
+ExecStop=/usr/bin/podman stop -t 10 {{ id.containers[0].Id }}
+ExecStopPost=/usr/bin/podman stop -t 10 {{ id.containers[0].Id }}
+PIDFile=/run/user/1000/containers/overlay-containers/{{ id.containers[0].Id }}/userdata/conmon.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

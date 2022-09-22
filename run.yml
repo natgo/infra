@@ -63,6 +63,14 @@
             - services
             - containers
         when: enable_uptime_kuma | default(False)
+
+      - role: containers/services/jmusicbot
+        tags:
+            - jmusicbot
+            - services
+            - containers
+        when: enable_jmusicbot | default(False)
+
       - role: containers/media/tvheadend
         tags:
             - tvheadend

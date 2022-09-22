@@ -19,6 +19,13 @@
     state: directory
     mode: "0770"
 
+- name: Make systemd directory
+  become: false
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/systemd/user"
+    state: directory
+    mode: "0770"
+
 - name: Create the swag network
   become: false
   containers.podman.podman_network:
