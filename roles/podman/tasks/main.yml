@@ -26,6 +26,15 @@
     state: directory
     mode: "0770"
 
+- name: Check if user is lingering
+  stat:
+    path: "/var/lib/systemd/linger/{{ username }}"
+  register: user_lingering
+
+- name: Enable lingering
+  command: "loginctl enable-linger {{ username }}"
+  when: not user_lingering.stat.exists
+
 - name: Create the swag network
   become: false
   containers.podman.podman_network:

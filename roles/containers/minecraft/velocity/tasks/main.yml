@@ -12,6 +12,13 @@
     mode: "0660"
   notify: Restart velocity
 
+- name: "Add forwarding secret file for {{ container_name }}"
+  ansible.builtin.template:
+    src: "velocity_forwarding_secret.j2"
+    dest: "{{ podman_dir }}/{{ container_name }}/forwarding.secret"
+    mode: "0660"
+  notify: Restart velocity
+
 - name: Make sure the {{ container_name }} container is created and running
   containers.podman.podman_container:
     name: "{{ container_name }}"
@@ -23,10 +30,10 @@
     env:
       "TYPE": "VELOCITY"
       "TZ": "{{ timezone }}"
-      "PUID": "{{ guid }}"
-      "PGID": "{{ guid }}"
+      "UID": "{{ guid }}"
+      "GID": "{{ guid }}"
+    ports:
+      - 25565:25577
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/server"
     restart_policy: unless-stopped
-    ports:
-      - 25565:25577

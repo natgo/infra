@@ -1,0 +1,27 @@
+---
+- name: Make {{ podman_dir }}/{{ container_name }} directory
+  ansible.builtin.file:
+    path: "{{ podman_dir }}/{{ container_name }}"
+    state: directory
+    mode: "0770"
+
+- name: Make sure the {{ container_name }} container is created and running
+  containers.podman.podman_container:
+    name: "{{ container_name }}"
+    image: "docker.io/itzg/minecraft-server"
+    network:
+      - name: minecraft
+        ipv4_address: "{{ ip_address }}"
+    state: 'started'
+    env:
+      "TYPE": "FABRIC"
+      "VERSION": "1.18.2"
+      "EULA": "TRUE"
+      "TZ": "{{ timezone }}"
+      "PUID": "{{ guid }}"
+      "PGID": "{{ guid }}"
+    volumes:
+      - "{{ podman_dir }}/{{ container_name }}:/data"
+    restart_policy: unless-stopped
+    ports:
+      - 25567:25565

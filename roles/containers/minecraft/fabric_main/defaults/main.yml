@@ -1,0 +1,4 @@
+---
+container_name: fabric_main
+
+ip_address: "{{ minecraft_base }}.3"

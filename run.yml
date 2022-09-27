@@ -122,3 +122,9 @@
             - minecraft
             - containers
         when: enable_minecraft_velocity | default(False)
+      - role: containers/minecraft/fabric_main
+        tags:
+            - fabric_main
+            - minecraft
+            - containers
+        when: enable_minecraft_fabric_main | default(False)

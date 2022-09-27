@@ -93,7 +93,7 @@ enable_jmusicbot: false
 
 enable_minecraft_velocity: true
 
-enable_minecraft_main: false
+enable_minecraft_fabric_main: true
 
 enable_minecraft_secondary: false
 
