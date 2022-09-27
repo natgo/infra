@@ -1,4 +1,5 @@
 ---
+
 - name: Make {{ podman_dir }}/{{ container_name }} directory
   ansible.builtin.file:
     path: "{{ podman_dir }}/{{ container_name }}"
@@ -30,15 +31,15 @@
         name:
           - "{{ container_name }}"
       register: id
-    - name: log id
+    - name: Log id
       ansible.builtin.debug:
         msg: "{{ id.containers[0].Id }}"
-    - name: add systemd unit
-      template:
+    - name: Add systemd unit
+      ansible.builtin.template:
         src: "systemd_container.j2"
         dest: "/home/{{ username }}/.config/systemd/user/container-{{ container_name }}.service"
         mode: "0660"
-    - name: enable systemd unit
+    - name: Enable systemd unit
       ansible.builtin.systemd:
         name: "container-{{ container_name }}.service"
         enabled: true
