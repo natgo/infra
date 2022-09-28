@@ -23,3 +23,7 @@
       - '/media/sda-crypt/jellyfin:/media'
       - '/media/sdb-crypt/jellyfin/movies:/media/ssdmovies'
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

@@ -5,6 +5,9 @@
     name: '{{ container_name }}'
     image: "lscr.io/linuxserver/swag"
     state: 'started'
+    ports:
+      - 80:80
+      - 443:443
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/config"
     env:
@@ -20,7 +23,8 @@
     networks:
       - name: swag
         ipv4_address: "{{ ip_address }}"
-    ports:
-      - 80:80
-      - 443:443
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

@@ -27,13 +27,17 @@
       - name: minecraft
         ipv4_address: "{{ ip_address }}"
     state: 'started'
+    ports:
+      - 25565:25577
     env:
       "TYPE": "VELOCITY"
       "TZ": "{{ timezone }}"
       "UID": "{{ guid }}"
       "GID": "{{ guid }}"
-    ports:
-      - 25565:25577
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/server"
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

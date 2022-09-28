@@ -13,6 +13,8 @@
       - name: swag
         ipv4_address: "{{ ip_address }}"
     state: 'started'
+    ports:
+      - 9696:9696
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
@@ -20,5 +22,3 @@
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/app/config"
     restart_policy: unless-stopped
-    ports:
-      - 9696:9696

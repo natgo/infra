@@ -33,3 +33,7 @@
     groups:
       - keep-groups
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

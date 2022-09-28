@@ -10,11 +10,11 @@
     name: '{{ container_name }}'
     image: "docker.io/mumblevoip/mumble-server:latest"
     state: 'started'
+    ports:
+      - 64738:64738
+      - 64738:64738/udp
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/data"
     env:
       'TZ': '{{ timezone }}'
-    ports:
-      - 64738:64738
-      - 64738:64738/udp
     restart_policy: unless-stopped

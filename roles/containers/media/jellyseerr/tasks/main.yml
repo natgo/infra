@@ -20,3 +20,7 @@
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/app/config"
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

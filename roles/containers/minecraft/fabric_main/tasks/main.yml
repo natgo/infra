@@ -13,6 +13,8 @@
       - name: minecraft
         ipv4_address: "{{ ip_address }}"
     state: 'started'
+    ports:
+      - 25567:25565
     env:
       "TYPE": "FABRIC"
       "VERSION": "1.18.2"
@@ -23,5 +25,3 @@
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/data"
     restart_policy: unless-stopped
-    ports:
-      - 25567:25565

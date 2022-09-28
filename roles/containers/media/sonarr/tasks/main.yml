@@ -13,6 +13,8 @@
       - name: swag
         ipv4_address: "{{ ip_address }}"
     state: 'started'
+    ports:
+      - 8989:8989
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
@@ -22,5 +24,3 @@
       - /media/sda-crypt/jellyfin/tv:/tv
       - /media/sdb-crypt/toronto:/downloads
     restart_policy: unless-stopped
-    ports:
-      - 8989:8989

@@ -26,3 +26,7 @@
       "DIUN_NOTIF_DISCORD_WEBHOOKURL": "{{ diun_webhook }}"
       "DIUN_NOTIF_DISCORD_TEMPLATEBODY": "{{ diun_template }}"
     restart_policy: always
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

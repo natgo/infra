@@ -13,6 +13,8 @@
       - name: swag
         ipv4_address: "{{ ip_address }}"
     state: 'started'
+    ports:
+      - 7878:7878
     env:
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
@@ -23,5 +25,7 @@
       - /media/sdb-crypt/toronto:/downloads
       - /media/sdb-crypt/jellyfin/movies:/ssdmovies
     restart_policy: unless-stopped
-    ports:
-      - 7878:7878
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }

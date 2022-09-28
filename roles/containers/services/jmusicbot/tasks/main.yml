@@ -23,6 +23,10 @@
     volumes:
       - "{{ podman_dir }}/{{ container_name }}:/opt/jmusicbot/config"
     restart_policy: unless-stopped
+    generate_systemd:
+      {
+        path: "/home/{{ username }}/.config/systemd/user"
+      }
 
 - name: Make container {{ container_name }} start on boot
   block:

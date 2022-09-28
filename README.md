@@ -6,5 +6,12 @@ It assumes a fresh Ubuntu Server 22.04 install, access to a non-root user with s
 
 The playbook is mostly being developed for personal use, so stuff is going to be constantly changing and breaking. Use at your own risk and don't expect any help in setting it up on your machine.
 
+## Usage
+
+Install the ansible-podman-collections master or else it recreates podman networks every time 
+```
+ansible-galaxy collection install git+https://github.com/containers/ansible-podman-collections,master
+```
+
 ## Special thanks
 * Wolfgang for his [infra](https://github.com/notthebee/infra) project. This is where I got the idea and "borrowed" a lot of concepts and implementations from.
