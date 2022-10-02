@@ -1,0 +1,39 @@
+---
+- name: Add linuxtv repo
+  block:
+    - name: Check if the key exists
+      ansible.builtin.stat:
+        path: /etc/apt/trusted.gpg.d/linuxtv.gpg
+      register: linuxtv_signing_key
+
+    - name: Download the signing key
+      ansible.builtin.get_url:
+        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9ec21b6eaabf32a03a92ca2eed51750f9347dec9
+        dest: /etc/apt/trusted.gpg.d/linuxtv
+        mode: 0644
+      when: not linuxtv_signing_key.stat.exists
+
+    - name: Dearmor the key
+      ansible.builtin.command: gpg --dearmor /etc/apt/trusted.gpg.d/linuxtv
+      when: not linuxtv_signing_key.stat.exists
+
+    - name: Remove temp key
+      ansible.builtin.file:
+        dest: /etc/apt/trusted.gpg.d/linuxtv
+        state: absent
+      when: not linuxtv_signing_key.stat.exists
+
+    - name: Add the repo to sources
+      ansible.builtin.template:
+        src: "linuxtv_repo.j2"
+        dest: /etc/apt/sources.list.d/linuxtv.list
+        mode: 0644
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+- name: Install Hauppage Firmware
+  apt:
+    name: linux-firmware-hauppauge
+    state: present

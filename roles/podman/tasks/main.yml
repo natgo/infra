@@ -5,24 +5,24 @@
     - name: Check if the key exists
       ansible.builtin.stat:
         path: /etc/apt/trusted.gpg.d/podman.gpg
-      register: signing_key
+      register: podman_signing_key
 
     - name: Download the signing key
       ansible.builtin.get_url:
         url: https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_22.04/Release.key
         dest: /etc/apt/trusted.gpg.d/podman
         mode: 0644
-      when: not signing_key.stat.exists
+      when: not podman_signing_key.stat.exists
 
     - name: Dearmor the key
       ansible.builtin.command: gpg --dearmor /etc/apt/trusted.gpg.d/podman
-      when: not signing_key.stat.exists
+      when: not podman_signing_key.stat.exists
 
     - name: Remove temp key
       ansible.builtin.file:
         dest: /etc/apt/trusted.gpg.d/podman
         state: absent
-      when: not signing_key.stat.exists
+      when: not podman_signing_key.stat.exists
 
     - name: Add the repo to sources
       ansible.builtin.template:
@@ -32,7 +32,7 @@
 
     - name: Update apt cache
       ansible.builtin.apt:
-        upgrade: true
+        update_cache: true
 
 - name: Install Podman
   when: ansible_facts['os_family'] == 'Debian'

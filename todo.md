@@ -1,3 +1,3 @@
 - [ ] minecraft
 - [x] tvheadend
-- [ ] musicbot
+- [x] musicbot

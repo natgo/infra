@@ -2,3 +2,4 @@
 - include_tasks: essential.yml
 - include_tasks: yeet_snaps.yml
 - include_tasks: harden_ssh.yml
+- include_tasks: linuxtv.yml
