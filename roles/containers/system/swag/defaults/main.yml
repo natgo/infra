@@ -2,3 +2,5 @@
 container_name: swag
 
 ip_address: "{{ swag_base }}.2"
+minecraft_ip_address: "{{ minecraft_base }}.2"
+nextcloud_ip_address: "{{ nextcloud_base }}.2"

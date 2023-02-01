@@ -1,19 +1,20 @@
 ---
 
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: '{{ container_name }}'
     image: "docker.io/crazymax/diun:latest"
     state: 'started'
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/data"
-      - "/var/run/user/1000/podman/podman.sock:/var/run/docker.sock"
+      - "{{ docker_dir }}/{{ container_name }}:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     env:
       'TZ': '{{ timezone }}'
       "LOG_LEVEL": "info"
@@ -24,9 +25,4 @@
       "DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT": "true"
       "DIUN_NOTIF_DISCORD_MENTIONS": "@here,@everyone"
       "DIUN_NOTIF_DISCORD_WEBHOOKURL": "{{ diun_webhook }}"
-      "DIUN_NOTIF_DISCORD_TEMPLATEBODY": "{{ diun_template }}"
     restart_policy: always
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }

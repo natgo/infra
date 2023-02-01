@@ -1,14 +1,15 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/radarr"
+    image: "lscr.io/linuxserver/radarr"
     networks:
       - name: swag
         ipv4_address: "{{ ip_address }}"
@@ -20,12 +21,8 @@
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/config"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
       - /media/sda-crypt/jellyfin/movies:/movies
       - /media/sdb-crypt/toronto:/downloads
       - /media/sdb-crypt/jellyfin/movies:/ssdmovies
     restart_policy: unless-stopped
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }

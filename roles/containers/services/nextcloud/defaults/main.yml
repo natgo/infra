@@ -1,4 +1,8 @@
-mysql_db: "nextcloud_db"
+mariadb_ip_address: "30.0.0.4"
+
+nextcloud_ip_address: "30.0.0.3"
+
+mysql_db: "nextcloud"
 
 mysql_user: "nextcloud"
 

@@ -1,4 +1,4 @@
 ---
 container_name: velocity
 
-ip_address: "{{ minecraft_base }}.2"
+ip_address: "{{ minecraft_base }}.3"

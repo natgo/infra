@@ -1,4 +1,2 @@
 ---
 container_name: diun
-
-diun_template: "Docker tag \\{\\{ .Entry.Image \\}\\} which you subscribed to through \\{\\{ .Entry.Provider \\}\\} provider has been released."

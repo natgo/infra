@@ -1,26 +1,29 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: "Add config file for {{ container_name }}"
+  become: false
   ansible.builtin.template:
     src: "velocity.j2"
-    dest: "{{ podman_dir }}/{{ container_name }}/velocity.toml"
+    dest: "{{ docker_dir }}/{{ container_name }}/velocity.toml"
     mode: "0660"
   notify: Restart velocity
 
 - name: "Add forwarding secret file for {{ container_name }}"
+  become: false
   ansible.builtin.template:
     src: "velocity_forwarding_secret.j2"
-    dest: "{{ podman_dir }}/{{ container_name }}/forwarding.secret"
+    dest: "{{ docker_dir }}/{{ container_name }}/forwarding.secret"
     mode: "0660"
   notify: Restart velocity
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
     image: "docker.io/itzg/bungeecord"
     network:
@@ -35,9 +38,5 @@
       "UID": "{{ guid }}"
       "GID": "{{ guid }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/server"
+      - "{{ docker_dir }}/{{ container_name }}:/server"
     restart_policy: unless-stopped
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }

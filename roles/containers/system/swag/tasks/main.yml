@@ -1,7 +1,14 @@
 ---
 
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ docker_dir }}/{{ container_name }}"
+    state: directory
+    mode: "0770"
+
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: '{{ container_name }}'
     image: "lscr.io/linuxserver/swag"
     state: 'started'
@@ -9,13 +16,13 @@
       - 80:80
       - 443:443
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/config"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
     env:
       'TZ': '{{ timezone }}'
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
       "URL": "{{ domain }}"
-      "SUBDOMAINS": "jellyfin,nextcloud,bluemap,status,request"
+      "SUBDOMAINS": "jellyfin,nextcloud,bluemap,status,request,ci,office"
       "VALIDATION": "http"
       "DHLEVEL": "2048"
       "ONLY_SUBDOMAINS": "false"
@@ -23,8 +30,8 @@
     networks:
       - name: swag
         ipv4_address: "{{ ip_address }}"
+      - name: minecraft
+        ipv4_address: "{{ minecraft_ip_address }}"
+      - name: nextcloud_network
+        ipv4_address: "{{ nextcloud_ip_address }}"
     restart_policy: unless-stopped
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }

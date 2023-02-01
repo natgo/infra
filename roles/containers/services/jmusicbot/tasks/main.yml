@@ -1,50 +1,27 @@
 ---
 
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: "Add config file for {{ container_name }}"
+  become: false
   ansible.builtin.template:
     src: "jmusicbot_config.j2"
-    dest: "{{ podman_dir }}/{{ container_name }}/config.txt"
+    dest: "{{ docker_dir }}/{{ container_name }}/config.txt"
     mode: "0660"
   notify: Restart jmusicbot
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
     image: "docker.io/bas0korver/jmusicbot:latest"
     state: 'started'
     env:
       "TZ": "{{ timezone }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/opt/jmusicbot/config"
+      - "{{ docker_dir }}/{{ container_name }}:/opt/jmusicbot/config"
     restart_policy: unless-stopped
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }
-
-- name: Make container {{ container_name }} start on boot
-  block:
-    - name: Get info about container {{ container_name }}
-      containers.podman.podman_container_info:
-        name:
-          - "{{ container_name }}"
-      register: id
-    - name: Log id
-      ansible.builtin.debug:
-        msg: "{{ id.containers[0].Id }}"
-    - name: Add systemd unit
-      ansible.builtin.template:
-        src: "systemd_container.j2"
-        dest: "/home/{{ username }}/.config/systemd/user/container-{{ container_name }}.service"
-        mode: "0660"
-    - name: Enable systemd unit
-      ansible.builtin.systemd:
-        name: "container-{{ container_name }}.service"
-        enabled: true
-        scope: user

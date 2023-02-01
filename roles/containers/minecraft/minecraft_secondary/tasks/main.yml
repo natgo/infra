@@ -1,29 +1,29 @@
 ---
-- name: Make {{ docker_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/minecraft/{{ container_name }} directory
   become: false
   ansible.builtin.file:
-    path: "{{ docker_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/minecraft/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
   community.docker.docker_container:
     name: "{{ container_name }}"
-    image: "lscr.io/linuxserver/tvheadend:latest"
+    image: "docker.io/itzg/minecraft-server"
     networks:
-      - name: swag
+      - name: minecraft
         ipv4_address: "{{ ip_address }}"
     state: 'started'
     ports:
-      - 9981:9981
-      - 9982:9982
+      - 6969:6969
     env:
+      "TYPE": "PAPER"
+      "VERSION": "1.19.2"
+      "MEMORY": "8G"
+      "EULA": "TRUE"
       "TZ": "{{ timezone }}"
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
     volumes:
-      - "{{ docker_dir }}/{{ container_name }}/config:/config"
-      - "{{ docker_dir }}/{{ container_name }}/recordings:/recordings"
-    devices:
-      - /dev/dvb:/dev/dvb
+      - "{{ docker_dir }}/minecraft/{{ container_name }}:/data"
     restart_policy: unless-stopped

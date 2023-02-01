@@ -1,6 +1,5 @@
 ---
 - name: Ubuntu specific tasks
-  become: true
   when: ansible_facts['distribution'] == 'Ubuntu'
   block:
   - name: Remove cloud related stuff to avoid boot delay
@@ -12,15 +11,6 @@
         - cloud-initramfs-copymods
         - cloud-guest-utils
       state: absent
-
-  - name: Make sure iSCSId and Open-iSCSId services are disabled
-    service:
-      name: "{{ item }}"
-      state: stopped
-      enabled: false
-    with_items:
-      - iscsid
-      - open-iscsi
 
   - name: Remove open-iscsi
     apt:

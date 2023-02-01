@@ -1,27 +1,30 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/minecraft/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/minecraft/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
     image: "docker.io/itzg/minecraft-server"
-    network:
+    networks:
       - name: minecraft
         ipv4_address: "{{ ip_address }}"
     state: 'started'
     ports:
-      - 25567:25565
+      - 25565:25565
     env:
       "TYPE": "FABRIC"
-      "VERSION": "1.18.2"
+      "VERSION": "1.19.2"
+      "PACKWIZ_URL": "https://natgo.xyz/files/minecraft/modpacks/fabric-modded/.minecraft/pack.toml"
+      "MEMORY": "8G"
       "EULA": "TRUE"
       "TZ": "{{ timezone }}"
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/data"
+      - "{{ docker_dir }}/minecraft/{{ container_name }}:/data"
     restart_policy: unless-stopped

@@ -1,12 +1,13 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
     image: "lscr.io/linuxserver/heimdall"
     networks:
@@ -21,5 +22,5 @@
       "PGID": "{{ guid }}"
       "TZ": "{{ timezone }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/config"
+      - "{{ docker_dir }}/{{ container_name }}:/config"
     restart_policy: unless-stopped

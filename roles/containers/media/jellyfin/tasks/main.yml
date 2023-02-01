@@ -1,29 +1,26 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
     mode: "0770"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
-    image: "ghcr.io/linuxserver/jellyfin"
+    image: "docker.io/jellyfin/jellyfin:latest"
     networks:
       - name: swag
         ipv4_address: "{{ ip_address }}"
     state: 'started'
     env:
-      "TZ": "{{ timezone }}"
       "PUID": "{{ guid }}"
       "PGID": "{{ guid }}"
+      "TZ": "{{ timezone }}"
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}/config:/config"
-      - "{{ podman_dir }}/{{ container_name }}/cache:/cache"
+      - "{{ docker_dir }}/{{ container_name }}/config:/config"
+      - "{{ docker_dir }}/{{ container_name }}/cache:/cache"
       - '/media/sda-crypt/jellyfin:/media'
       - '/media/sdb-crypt/jellyfin/movies:/media/ssdmovies'
     restart_policy: unless-stopped
-    generate_systemd:
-      {
-        path: "/home/{{ username }}/.config/systemd/user"
-      }

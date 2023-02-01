@@ -1,2 +1,2 @@
 [home]
-ubuntu-server ansible_host=192.168.122.201 ansible_user=jone ansible_connection=ssh ansible_ssh_private_key_file=/home/natgo/.ssh/ubuntu-server
+ubuntu-server ansible_host=192.168.1.137 ansible_user=jone ansible_connection=ssh ansible_ssh_private_key_file=/home/natgo/.ssh/ubuntu-server

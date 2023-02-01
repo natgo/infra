@@ -1,0 +1,5 @@
+controller_container_name: jenkins
+
+controller_ip_address: "{{ swag_base }}.40"
+
+dind_container_name: jenkins-dind

@@ -8,22 +8,18 @@
 
 - name: Make sure the {{ container_name }} container is created and running
   community.docker.docker_container:
-    name: "{{ container_name }}"
-    image: "lscr.io/linuxserver/tvheadend:latest"
+    name: '{{ container_name }}'
+    image: 'docker.io/collabora/code'
     networks:
-      - name: swag
+      - name: nextcloud_network
         ipv4_address: "{{ ip_address }}"
     state: 'started'
-    ports:
-      - 9981:9981
-      - 9982:9982
     env:
-      "TZ": "{{ timezone }}"
-      "PUID": "{{ guid }}"
-      "PGID": "{{ guid }}"
-    volumes:
-      - "{{ docker_dir }}/{{ container_name }}/config:/config"
-      - "{{ docker_dir }}/{{ container_name }}/recordings:/recordings"
-    devices:
-      - /dev/dvb:/dev/dvb
+      'aliasgroup1': "https://nextcloud.natgo.xyz:443,https://nextcloud\\.natgo\\.xyz"
+      'username': '{{ collabora_username }}'
+      'password': '{{ collabora_password }}'
+      'extra_params': '--o:ssl.enable=true'
+      'PUID': '{{ guid }}'
+      'PGID': '{{ guid }}'
+      'TZ': '{{ timezone }}'
     restart_policy: unless-stopped

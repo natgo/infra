@@ -1,52 +1,55 @@
 ---
 
-- name: Add podman repo
+- name: Add docker repo
   block:
     - name: Check if the key exists
       ansible.builtin.stat:
-        path: /etc/apt/trusted.gpg.d/podman.gpg
-      register: podman_signing_key
+        path: /etc/apt/trusted.gpg.d/docker.gpg
+      register: docker_signing_key
 
     - name: Download the signing key
       ansible.builtin.get_url:
-        url: https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_22.04/Release.key
-        dest: /etc/apt/trusted.gpg.d/podman
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/trusted.gpg.d/docker
         mode: 0644
-      when: not podman_signing_key.stat.exists
+      when: not docker_signing_key.stat.exists
 
     - name: Dearmor the key
-      ansible.builtin.command: gpg --dearmor /etc/apt/trusted.gpg.d/podman
-      when: not podman_signing_key.stat.exists
+      ansible.builtin.command: gpg --dearmor /etc/apt/trusted.gpg.d/docker
+      when: not docker_signing_key.stat.exists
 
     - name: Remove temp key
       ansible.builtin.file:
-        dest: /etc/apt/trusted.gpg.d/podman
+        dest: /etc/apt/trusted.gpg.d/docker
         state: absent
-      when: not podman_signing_key.stat.exists
+      when: not docker_signing_key.stat.exists
 
     - name: Add the repo to sources
       ansible.builtin.template:
-        src: "podman_repo.j2"
-        dest: /etc/apt/sources.list.d/podman.list
+        src: "docker_repo.j2"
+        dest: /etc/apt/sources.list.d/docker.list
         mode: 0644
 
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: true
 
-- name: Install Podman
+
+- name: Install Docker
   when: ansible_facts['os_family'] == 'Debian'
   ansible.builtin.apt:
-    name: "{{ podman_packages }}"
+    name: "{{ docker_packages }}"
     state: present
 
-- name: Enable Podman socket
-  become: false
-  ansible.builtin.systemd:
-    name: podman.socket
-    enabled: true
+- name: Make sure Docker is running and enabled
+  service:
+    name: docker
     state: started
-    scope: user
+    enabled: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
 
 - name: Make /srv user writeable
   ansible.builtin.file:
@@ -54,42 +57,24 @@
     owner: "{{ username }}"
     group: "{{ username }}"
 
-- name: Make {{ podman_dir }} directory
+- name: Make {{ docker_dir }} directory
   become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}"
+    path: "{{ docker_dir }}"
     state: directory
     mode: "0770"
-
-- name: Make systemd directory
-  become: false
-  ansible.builtin.file:
-    path: "/home/{{ username }}/.config/systemd/user"
-    state: directory
-    mode: "0770"
-
-- name: Check if user is lingering
-  ansible.builtin.stat:
-    path: "/var/lib/systemd/linger/{{ username }}"
-  register: user_lingering
-
-- name: Enable lingering
-  ansible.builtin.command: "loginctl enable-linger {{ username }}"
-  when: not user_lingering.stat.exists
 
 - name: Create the swag network
-  become: false
-  containers.podman.podman_network:
+  community.docker.docker_network:
     name: swag
-    subnet: "{{ swag_network }}"
-    gateway: "{{ swag_gateway }}"
+    ipam_config:
+      - subnet: "{{ swag_network }}"
 
 - name: Create the minecraft network
-  become: false
-  containers.podman.podman_network:
+  community.docker.docker_network:
     name: minecraft
-    subnet: "{{ minecraft_network }}"
-    gateway: "{{ minecraft_gateway }}"
+    ipam_config:
+      - subnet: "{{ minecraft_network }}"
 
 # - name: Handle persistent data
 #   become: no
@@ -97,21 +82,21 @@
 #   block:
 #   - name: Check if the persistent data folder exists on the remote machine
 #     stat:
-#       path: "{{ podman_dir }}"
+#       path: "{{ docker_dir }}"
 #     register: persistent_data
 #     when: "enable_nas_stuff | default(False)"
 #
 #   - name: Check if the persistent data folder is empty
 #     find:
 #       paths:
-#         - "{{ podman_dir }}/"
+#         - "{{ docker_dir }}/"
 #       recurse: yes
 #     register: persistent_data_find
 #     when: "enable_nas_stuff | default(False)"
 #
 #   - name: Create the persistent data folder on the remote machine
 #     file:
-#       dest: "{{ podman_dir }}"
+#       dest: "{{ docker_dir }}"
 #       state: directory
 #       owner: "{{ username }}"
 #       group: "users"
@@ -122,7 +107,7 @@
 # - name: Chmod the data folder
 #   become: yes
 #   file:
-#     dest: "{{ podman_dir }}"
+#     dest: "{{ docker_dir }}"
 #     state: directory
 #     owner: "{{ username }}"
 #     mode: "0775"

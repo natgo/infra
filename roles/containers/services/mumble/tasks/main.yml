@@ -1,12 +1,13 @@
 ---
-- name: Make {{ podman_dir }}/{{ container_name }} directory
+- name: Make {{ docker_dir }}/{{ container_name }} directory
+  become: false
   ansible.builtin.file:
-    path: "{{ podman_dir }}/{{ container_name }}"
+    path: "{{ docker_dir }}/{{ container_name }}"
     state: directory
-    mode: "0770"
+    mode: "0777"
 
 - name: Make sure the {{ container_name }} container is created and running
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: '{{ container_name }}'
     image: "docker.io/mumblevoip/mumble-server:latest"
     state: 'started'
@@ -14,7 +15,12 @@
       - 64738:64738
       - 64738:64738/udp
     volumes:
-      - "{{ podman_dir }}/{{ container_name }}:/data"
+      - "{{ docker_dir }}/{{ container_name }}:/data"
+      - "{{ docker_dir }}/swag/etc/letsencrypt:/swag-ssl"
     env:
       'TZ': '{{ timezone }}'
+      "MUMBLE_CONFIG_serverpassword": "{{ mumble_serverpassword }}"
+      "MUMBLE_CONFIG_logfile": "/data/murmur.log"
+      "MUMBLE_CONFIG_sslCert": "/swag-ssl/live/natgo.xyz/fullchain.pem"
+      "MUMBLE_CONFIG_sslKey": "/swag-ssl/live/natgo.xyz/privkey.pem"
     restart_policy: unless-stopped

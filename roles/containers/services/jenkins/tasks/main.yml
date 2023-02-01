@@ -1,0 +1,32 @@
+---
+- name: Make {{ docker_dir }}/jenkins/controller directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ docker_dir }}/jenkins/controller"
+    state: directory
+    mode: "0777"
+
+- name: Make {{ docker_dir }}/jenkins/certs directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ docker_dir }}/jenkins/certs"
+    state: directory
+    mode: "0777"
+
+- name: Make sure the {{ controller_container_name }} container is created and running
+  community.docker.docker_container:
+    name: "{{ controller_container_name }}"
+    image: "myjenkins:lts"
+    networks:
+      - name: swag
+        ipv4_address: "{{ controller_ip_address }}"
+    state: 'started'
+    ports:
+      - 50000:50000
+    env:
+      "TZ": "{{ timezone }}"
+    volumes:
+      - "{{ docker_dir }}/jenkins/controller:/var/jenkins_home"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/srv/podman/swag/www/wt:/wt"
+    restart_policy: unless-stopped

@@ -1,7 +1,7 @@
 ---
 
 - name: Restart velocity
-  containers.podman.podman_container:
+  community.docker.docker_container:
     name: "{{ container_name }}"
     state: 'started'
     force_restart: true

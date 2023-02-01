@@ -13,6 +13,8 @@ swag_network: '10.0.0.0/24'
 
 minecraft_network: '20.0.0.0/24'
 
+nextcloud_network: '30.0.0.0/24'
+
 swag_base: "{{ '.'.join(swag_network.split('.')[0:3]) }}"
 
 swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
@@ -20,6 +22,10 @@ swag_gateway: "{{ '.'.join(swag_network.split('.')[0:3]) }}.1"
 minecraft_base: "{{ '.'.join(minecraft_network.split('.')[0:3]) }}"
 
 minecraft_gateway: "{{ '.'.join(minecraft_network.split('.')[0:3]) }}.1"
+
+nextcloud_base: "{{ '.'.join(nextcloud_network.split('.')[0:3]) }}"
+
+nextcloud_gateway: "{{ '.'.join(nextcloud_network.split('.')[0:3]) }}.1"
 
 lan_address: "{{ '.'.join(lan_network.split('.')[0:3]) }}.137"
 
@@ -44,7 +50,7 @@ username: jone
 
 guid: '1000'
 
-podman_dir: /srv/podman
+docker_dir: /srv/podman
 
 #
 # Packages
@@ -54,6 +60,8 @@ extra_packages:
     - git
     - ncdu
     - unzip
+    - apt-transport-https
+    - python3-pip
 
 #
 # Enable/disable functionality
@@ -61,41 +69,43 @@ extra_packages:
 
 # Media
 
-enable_tvheadend: false
+enable_tvheadend: true
 
-enable_jellyfin: false
+enable_jellyfin: true
 
-enable_sonarr: false
+enable_sonarr: true
 
-enable_radarr: false
+enable_radarr: true
 
-enable_bazarr: false
+enable_bazarr: true
 
-enable_prowlarr: false
-
-enable_jellyseerr: false
+enable_jellyseerr: true
 
 # Public-facing services
 
-enable_heimdall: false
+enable_heimdall: true
 
-enable_nextcloud: false
+enable_jenkins: true
 
-enable_uptime_kuma: false
+enable_nextcloud: true
 
-enable_mumble: false
+enable_collabora: true
 
-enable_swag: false
+enable_uptime_kuma: true
 
-enable_jmusicbot: false
+enable_mumble: true
+
+enable_swag: true
+
+enable_jmusicbot: true
 
 # Minecraft
 
-enable_minecraft_velocity: true
+enable_minecraft_velocity: false
 
 enable_minecraft_fabric_main: true
 
-enable_minecraft_secondary: false
+enable_minecraft_minecraft_secondary: true
 
 # Misc
 

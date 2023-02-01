@@ -1,26 +1,23 @@
 ---
 - hosts: all
-  become: false
+  become: true
 
   roles:
       #
       # Basics
       #
       - role: system
-        become: true
         tags:
             - system
       # - role: tvheadend
       #  tags:
       #      - services
 
-      - role: podman
-        become: true
+      - role: docker
         tags:
-            - podman
+            - docker
 
       - role: nfs
-        become: true
         tags:
             - nfs
         when: enable_nfs | default(False)
@@ -45,6 +42,12 @@
             - services
             - containers
         when: enable_heimdall | default(False)
+      - role: containers/services/jenkins
+        tags:
+            - jenkins
+            - services
+            - containers
+        when: enable_jenkins | default(False)
       - role: containers/services/mumble
         tags:
             - mumble
@@ -57,6 +60,12 @@
             - services
             - containers
         when: enable_nextcloud | default(False)
+      - role: containers/services/collabora
+        tags:
+            - collabora
+            - services
+            - containers
+        when: enable_collabora | default(False)
       - role: containers/services/uptime-kuma
         tags:
             - uptime-kuma
@@ -83,12 +92,6 @@
             - media
             - containers
         when: enable_jellyfin | default(False)
-      - role: containers/media/prowlarr
-        tags:
-            - prowlarr
-            - media
-            - containers
-        when: enable_prowlarr | default(False)
       - role: containers/media/radarr
         tags:
             - radarr
@@ -128,3 +131,9 @@
             - minecraft
             - containers
         when: enable_minecraft_fabric_main | default(False)
+      - role: containers/minecraft/minecraft_secondary
+        tags:
+            - minecraft_secondary
+            - minecraft
+            - containers
+        when: enable_minecraft_minecraft_secondary | default(False)

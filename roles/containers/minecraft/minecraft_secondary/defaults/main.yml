@@ -1,0 +1,4 @@
+---
+container_name: minecraft_secondary
+
+ip_address: "{{ minecraft_base }}.5"
